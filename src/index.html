@@ -1,0 +1,33 @@
+
+    <h1>Socket IO (Frontend)</h1>
+
+    <ul id="mis-mensajes"></ul>
+
+    <input type="text" id="mensaje">
+    <button onclick="enviarMensaje()">Enviar Mensaje</button>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+        var socket = io();
+
+        function enviarMensaje(){
+            let miMensaje = document.getElementById("mensaje").value;
+            socket.emit("mi-chat", miMensaje);
+
+            var val = document.getElementById("mis-mensajes").innerHTML;
+            document.getElementById("mis-mensajes").innerHTML = val + "<li style='color:#00f'> >"+miMensaje+"</li>";
+        }
+
+        socket.on("mi-chat", function(mensaje){
+            console.log(mensaje)
+            if(mensaje.iap){
+                var val = document.getElementById("mis-mensajes").innerHTML;
+                document.getElementById("mis-mensajes").innerHTML = val + "<li style='color:red;border: 1px solid #560;padding:8px;'>IP: "+mensaje.ip + ": "+mensaje.iap+": -"+ mensaje.iar +"</li>";
+            }else{
+                var val = document.getElementById("mis-mensajes").innerHTML;
+                document.getElementById("mis-mensajes").innerHTML = val + "<li>"+mensaje+"</li>";
+            }
+        })
+
+    </script>
